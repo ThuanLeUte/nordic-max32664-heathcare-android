@@ -76,10 +76,13 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
     UUID BATTERY_SERVICE_UUID              = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
     UUID BATTERY_LEVEL_CHARACTERISTIC_UUID = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb");
 
-    UUID ACC_AXIS_SERVICE_UUID          = UUID.fromString("00001234-b38d-4985-720e-0f993a68ee41");
-    UUID ACC_AXIS_X_CHARACTERISTIC_UUID = UUID.fromString("00001235-0000-1000-8000-00805f9b34fb");
-    UUID ACC_AXIS_Y_CHARACTERISTIC_UUID = UUID.fromString("00001236-0000-1000-8000-00805f9b34fb");
-    UUID ACC_AXIS_Z_CHARACTERISTIC_UUID = UUID.fromString("00001237-0000-1000-8000-00805f9b34fb");
+    UUID SENSOR_HUB_SERVICE_UUID            = UUID.fromString("00001234-b38d-4985-720e-0f993a68ee41");
+    UUID SPO2_CHARACTERISTIC_UUID           = UUID.fromString("00001235-0000-1000-8000-00805f9b34fb");
+    UUID HEART_RATE_CHARACTERISTIC_UUID     = UUID.fromString("00001236-0000-1000-8000-00805f9b34fb");
+    UUID BLOOD_PRESSURE_CHARACTERISTIC_UUID = UUID.fromString("00001237-0000-1000-8000-00805f9b34fb");
+
+    UUID BODY_TEMPERATURE_SERVICE_UUID = UUID.fromString("00003234-b38d-4985-720e-0f993a68ee41");
+    UUID BODY_TEMPERATURE_CHARACTERISTIC_UUID =  UUID.fromString("00003235-0000-1000-8000-00805f9b34fb");
 
 
     @Override
@@ -97,10 +100,10 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
         data_3 = (TextView) (findViewById(R.id.data_3));
         data_4 = (TextView) (findViewById(R.id.data_4));
 
-        data_1.setText("Acc X Raw Axis:");
-        data_2.setText("Acc Y Raw Axis: ");
-        data_3.setText("Acc Z Raw Axis: ");
-        data_4.setText("");
+        data_1.setText("SPO2:");
+        data_2.setText("Heart Rate:");
+        data_3.setText("Blood Pressure:");
+        data_4.setText("Temperature:");
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +166,7 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             device = bluetoothAdapter.getRemoteDevice(result.getDevice().getAddress());
             Log.d(TAG, device.getName() + " " + device.getAddress());
-            String device_1 = "Jump Height Measure Device";
+            String device_1 = "All Health Kit";
             if (device.getName() != null) {
 
                 // Get name
@@ -269,9 +272,10 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
         }
 
         BluetoothGattCharacteristic battery_characteristic;
-        BluetoothGattCharacteristic acc_axis_x_characteristic;
-        BluetoothGattCharacteristic acc_axis_y_characteristic;
-        BluetoothGattCharacteristic acc_axis_z_characteristic;
+        BluetoothGattCharacteristic spo2_characteristic;
+        BluetoothGattCharacteristic heart_rate_characteristic;
+        BluetoothGattCharacteristic blood_pressure_characteristic;
+        BluetoothGattCharacteristic body_temperature_characteristic;
         int index = 0;
 
         @Override
@@ -305,42 +309,58 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                 }
                 // }
 
-                //Acc axis Service {
-                BluetoothGattService acc_axis_service = mBluetoothGatt.getService(ACC_AXIS_SERVICE_UUID);
-                if (acc_axis_service == null) {
-                    Log.i(TAG, "Acc axis service not found!");
+                // SENSOR_HUB_SERVICE_UUID {
+                BluetoothGattService sensor_hub_service = mBluetoothGatt.getService(SENSOR_HUB_SERVICE_UUID);
+                if (sensor_hub_service == null) {
+                    Log.i(TAG, "SENSOR_HUB_SERVICE_UUID not found!");
                     return;
                 }
                 else {
-                    Log.i(TAG, "Acc axis service found!");
+                    Log.i(TAG, "SENSOR_HUB_SERVICE_UUID found!");
 
-                    // Acc axis X Characteristic {
-                    acc_axis_x_characteristic = acc_axis_service.getCharacteristic(ACC_AXIS_X_CHARACTERISTIC_UUID);
-                    if (acc_axis_x_characteristic == null) {
-                        Log.i(TAG, "Acc axis X Characterictic not found!");
+                    // SPO2_CHARACTERISTIC_UUID {
+                    spo2_characteristic = sensor_hub_service.getCharacteristic(SPO2_CHARACTERISTIC_UUID);
+                    if (spo2_characteristic == null) {
+                        Log.i(TAG, "SPO2_CHARACTERISTIC_UUID not found!");
                         return;
                     }
-                    Log.i(TAG, String.format("Acc axis X Characterictic found: %s", acc_axis_x_characteristic.getUuid().toString()));
+                    Log.i(TAG, String.format("SPO2_CHARACTERISTIC_UUID found: %s", spo2_characteristic.getUuid().toString()));
                     // }
 
-                    // Acc axis Y Characteristic {
-                    acc_axis_y_characteristic = acc_axis_service.getCharacteristic(ACC_AXIS_Y_CHARACTERISTIC_UUID);
-                    if (acc_axis_y_characteristic == null) {
-                        Log.i(TAG, "Acc axis Y Characterictic not found!");
+                    // HEART_RATE_CHARACTERISTIC_UUID {
+                    heart_rate_characteristic = sensor_hub_service.getCharacteristic(HEART_RATE_CHARACTERISTIC_UUID);
+                    if (heart_rate_characteristic == null) {
+                        Log.i(TAG, "HEART_RATE_CHARACTERISTIC_UUID not found!");
                         return;
                     }
-                    Log.i(TAG, String.format("Acc axis Y Characterictic found: %s", acc_axis_y_characteristic.getUuid().toString()));
+                    Log.i(TAG, String.format("HEART_RATE_CHARACTERISTIC_UUID found: %s", heart_rate_characteristic.getUuid().toString()));
                     // }
 
-                    // Acc axis Z Characteristic {
-                    acc_axis_z_characteristic = acc_axis_service.getCharacteristic(ACC_AXIS_Z_CHARACTERISTIC_UUID);
-                    if (acc_axis_z_characteristic == null) {
-                        Log.i(TAG, "Acc axis Z Characterictic not found!");
+                    // BLOOD_PRESSURE_CHARACTERISTIC_UUID {
+                    blood_pressure_characteristic = sensor_hub_service.getCharacteristic(BLOOD_PRESSURE_CHARACTERISTIC_UUID);
+                    if (blood_pressure_characteristic == null) {
+                        Log.i(TAG, "BLOOD_PRESSURE_CHARACTERISTIC_UUID not found!");
                         return;
                     }
-                    Log.i(TAG, String.format("Acc axis Z Characterictic found: %s", acc_axis_z_characteristic.getUuid().toString()));
+                    Log.i(TAG, String.format("BLOOD_PRESSURE_CHARACTERISTIC_UUID found: %s", blood_pressure_characteristic.getUuid().toString()));
                     // }
                 }
+
+                // BODY_TEMPERATURE_SERVICE_UUID
+                BluetoothGattService temperature_service = mBluetoothGatt.getService(BODY_TEMPERATURE_SERVICE_UUID);
+                if (temperature_service == null) {
+                    Log.i(TAG, "BODY_TEMPERATURE_SERVICE_UUID not found!");
+                    return;
+                }
+                Log.i(TAG, "BODY_TEMPERATURE_SERVICE_UUID found!");
+
+                body_temperature_characteristic = temperature_service.getCharacteristic(BODY_TEMPERATURE_CHARACTERISTIC_UUID);
+                if (body_temperature_characteristic == null) {
+                    Log.i(TAG, "BODY_TEMPERATURE_CHARACTERISTIC_UUID not found!");
+                    return;
+                }
+                Log.i(TAG, String.format("BODY_TEMPERATURE_CHARACTERISTIC_UUID found: %s", body_temperature_characteristic.getUuid().toString()));
+                setCharacteristicNotification(body_temperature_characteristic, true);
                 // }
             } else {
                 Log.w(TAG, "Services Discovered received: " + status);
@@ -369,7 +389,7 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
             switch(index){
                 case 0:
                 {
-                    setCharacteristicNotification(acc_axis_x_characteristic, true);
+                    setCharacteristicNotification(spo2_characteristic, true);
                     index = 1;
                 }
                 case 1:
@@ -379,18 +399,19 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                 }
                 case 2:
                 {
-                    setCharacteristicNotification(acc_axis_y_characteristic, true);
+                    setCharacteristicNotification(heart_rate_characteristic, true);
                     index = 3;
                     break;
                 }
                 case 3:
                 {
+                    setCharacteristicNotification(blood_pressure_characteristic, true);
                     index = 4;
-                    setCharacteristicNotification(acc_axis_z_characteristic, true);
                     break;
                 }
                 case 4:
                 {
+                    setCharacteristicNotification(body_temperature_characteristic, true);
                     index = 5;
                     break;
                 }
@@ -423,23 +444,31 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                     battery.setText("Battery: " + data);
                     Log.d(TAG, String.format("Received value: %d", data));
                 }
-                else if (characteristic.getUuid().equals(ACC_AXIS_X_CHARACTERISTIC_UUID))
+                else if (characteristic.getUuid().equals(SPO2_CHARACTERISTIC_UUID))
                 {
-                    Log.d(TAG, "Acc X Raw Axis");
+                    Log.d(TAG, "SPO2");
                     final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-                    data_1.setText("Acc X Raw Axis: " + data);
+                    data_1.setText("SPO2: " + data);
                 }
-                else if (characteristic.getUuid().equals(ACC_AXIS_Y_CHARACTERISTIC_UUID))
+                else if (characteristic.getUuid().equals(HEART_RATE_CHARACTERISTIC_UUID))
                 {
-                    Log.d(TAG, "Acc Y Raw Axis");
+                    Log.d(TAG, "Heart Rate");
                     final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-                    data_2.setText("Acc Y Raw Axis: " + data);
+                    data_2.setText("Heart Rate: " + data);
                 }
-                else if (characteristic.getUuid().equals(ACC_AXIS_Z_CHARACTERISTIC_UUID))
+                else if (characteristic.getUuid().equals(BLOOD_PRESSURE_CHARACTERISTIC_UUID))
                 {
-                    Log.d(TAG, "Acc Z Raw Axis");
+                    Log.d(TAG, "Blood Pressure");
                     final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-                    data_3.setText("Acc Z Raw Axis: " + data);
+                    data_3.setText("Blood Pressure: " + data);
+                }
+                else if (characteristic.getUuid().equals(BODY_TEMPERATURE_CHARACTERISTIC_UUID))
+                {
+                    final byte[] value = characteristic.getValue();
+                    float data = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+                    Log.d(TAG, "Temperature");
+                    data_4.setText("Temperature: " + String.format("%.2f", data));
+                    Log.d(TAG, String.format("Received value: %f", data));
                 }
             }
         });
