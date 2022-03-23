@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Scan"/>
+
+        <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Connect"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ble_name"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:text="Device:" />
+
+    <TextView
+        android:id="@+id/ble_address"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:text="Address:" />
+
+    <TextView
+        android:id="@+id/battery"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:text="Battery:" />
+
+    <TextView
+        android:id="@+id/data_1"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textSize="30dp"
+        android:text="Data 1:" />
+
+    <TextView
+        android:id="@+id/data_2"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textSize="30dp"
+        android:text="Data 2:" />
+
+    <TextView
+        android:id="@+id/data_3"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textSize="30dp"
+        android:text="Data 3:" />
+
+    <TextView
+        android:id="@+id/data_4"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:textSize="30dp"
+        android:text="Data 4:" />
+
+</LinearLayout>

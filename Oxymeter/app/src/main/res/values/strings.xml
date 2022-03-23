@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Oxymeter</string>
+    <string name="ble_not_supported" />
+</resources>
