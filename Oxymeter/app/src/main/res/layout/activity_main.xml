@@ -60,17 +60,38 @@ tools:context=".MainActivity">
         android:text="Data 2:" />
 
     <TextView
-        android:id="@+id/data_3"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:textSize="30dp"
-        android:text="Data 3:" />
-
-    <TextView
         android:id="@+id/data_4"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:textSize="30dp"
         android:text="Data 4:" />
+
+    <TextView
+        android:id="@+id/data_5"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Data 5:"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/data_6"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Data 6:"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/data_7"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Data 7:"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/data_8"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Data 8:"
+        android:textSize="30dp" />
 
 </LinearLayout>

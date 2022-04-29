@@ -53,7 +53,7 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
     private Button btn_scan, btn_connect;
     private TextView ble_name, ble_address;
     private TextView battery, manufacturer;
-    private TextView data_1, data_2, data_3, data_4;
+    private TextView data_1, data_2, data_4, data_5, data_6, data_7, data_8;
 
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothDevice device;
@@ -76,10 +76,13 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
     UUID BATTERY_SERVICE_UUID              = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
     UUID BATTERY_LEVEL_CHARACTERISTIC_UUID = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb");
 
-    UUID SENSOR_HUB_SERVICE_UUID            = UUID.fromString("00001234-b38d-4985-720e-0f993a68ee41");
-    UUID SPO2_CHARACTERISTIC_UUID           = UUID.fromString("00001235-0000-1000-8000-00805f9b34fb");
-    UUID HEART_RATE_CHARACTERISTIC_UUID     = UUID.fromString("00001236-0000-1000-8000-00805f9b34fb");
-    UUID BLOOD_PRESSURE_CHARACTERISTIC_UUID = UUID.fromString("00001237-0000-1000-8000-00805f9b34fb");
+    UUID SENSOR_HUB_SERVICE_UUID                = UUID.fromString("00001234-b38d-4985-720e-0f993a68ee41");
+    UUID SPO2_CHARACTERISTIC_UUID               = UUID.fromString("00001235-0000-1000-8000-00805f9b34fb");
+    UUID HEART_RATE_CHARACTERISTIC_UUID         = UUID.fromString("00001236-0000-1000-8000-00805f9b34fb");
+    UUID BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID = UUID.fromString("00001237-0000-1000-8000-00805f9b34fb");
+    UUID BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID = UUID.fromString("00001238-0000-1000-8000-00805f9b34fb");
+    UUID PROGRESS_CHARACTERISTIC_UUID           = UUID.fromString("00001239-0000-1000-8000-00805f9b34fb");
+    UUID CALIB_CHARACTERISTIC_UUID              = UUID.fromString("00001231-0000-1000-8000-00805f9b34fb");
 
     UUID BODY_TEMPERATURE_SERVICE_UUID = UUID.fromString("00003234-b38d-4985-720e-0f993a68ee41");
     UUID BODY_TEMPERATURE_CHARACTERISTIC_UUID =  UUID.fromString("00003235-0000-1000-8000-00805f9b34fb");
@@ -97,13 +100,19 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
         battery = (TextView) (findViewById(R.id.battery));
         data_1 = (TextView) (findViewById(R.id.data_1));
         data_2 = (TextView) (findViewById(R.id.data_2));
-        data_3 = (TextView) (findViewById(R.id.data_3));
         data_4 = (TextView) (findViewById(R.id.data_4));
+        data_5 = (TextView) (findViewById(R.id.data_5));
+        data_6 = (TextView) (findViewById(R.id.data_6));
+        data_7 = (TextView) (findViewById(R.id.data_7));
+        data_8 = (TextView) (findViewById(R.id.data_8));
 
         data_1.setText("SPO2:");
         data_2.setText("Heart Rate:");
-        data_3.setText("Blood Pressure:");
         data_4.setText("Temperature:");
+        data_5.setText("Systolic BP:");
+        data_6.setText("Diastolic BP:");
+        data_7.setText("Progress:");
+        data_8.setText("Device mode:");
 
         btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +283,10 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
         BluetoothGattCharacteristic battery_characteristic;
         BluetoothGattCharacteristic spo2_characteristic;
         BluetoothGattCharacteristic heart_rate_characteristic;
-        BluetoothGattCharacteristic blood_pressure_characteristic;
+        BluetoothGattCharacteristic blood_pressure_sys_characteristic;
+        BluetoothGattCharacteristic blood_pressure_dia_characteristic;
+        BluetoothGattCharacteristic progress_characteristic;
+        BluetoothGattCharacteristic calib_characteristic;
         BluetoothGattCharacteristic body_temperature_characteristic;
         int index = 0;
 
@@ -336,13 +348,40 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                     Log.i(TAG, String.format("HEART_RATE_CHARACTERISTIC_UUID found: %s", heart_rate_characteristic.getUuid().toString()));
                     // }
 
-                    // BLOOD_PRESSURE_CHARACTERISTIC_UUID {
-                    blood_pressure_characteristic = sensor_hub_service.getCharacteristic(BLOOD_PRESSURE_CHARACTERISTIC_UUID);
-                    if (blood_pressure_characteristic == null) {
-                        Log.i(TAG, "BLOOD_PRESSURE_CHARACTERISTIC_UUID not found!");
+                    // BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID {
+                    blood_pressure_sys_characteristic = sensor_hub_service.getCharacteristic(BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID);
+                    if (blood_pressure_sys_characteristic == null) {
+                        Log.i(TAG, "BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID not found!");
                         return;
                     }
-                    Log.i(TAG, String.format("BLOOD_PRESSURE_CHARACTERISTIC_UUID found: %s", blood_pressure_characteristic.getUuid().toString()));
+                    Log.i(TAG, String.format("BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID found: %s", blood_pressure_sys_characteristic.getUuid().toString()));
+                    // }
+
+                    // BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID {
+                    blood_pressure_dia_characteristic = sensor_hub_service.getCharacteristic(BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID);
+                    if (blood_pressure_dia_characteristic == null) {
+                        Log.i(TAG, "BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID not found!");
+                        return;
+                    }
+                    Log.i(TAG, String.format("BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID found: %s", blood_pressure_dia_characteristic.getUuid().toString()));
+                    // }
+
+                    // PROGRESS_CHARACTERISTIC_UUID {
+                    progress_characteristic = sensor_hub_service.getCharacteristic(PROGRESS_CHARACTERISTIC_UUID);
+                    if (progress_characteristic == null) {
+                        Log.i(TAG, "PROGRESS_CHARACTERISTIC_UUID not found!");
+                        return;
+                    }
+                    Log.i(TAG, String.format("PROGRESS_CHARACTERISTIC_UUID found: %s", progress_characteristic.getUuid().toString()));
+                    // }
+
+                    // CALIB_CHARACTERISTIC_UUID {
+                    calib_characteristic = sensor_hub_service.getCharacteristic(CALIB_CHARACTERISTIC_UUID);
+                    if (calib_characteristic == null) {
+                        Log.i(TAG, "CALIB_CHARACTERISTIC_UUID not found!");
+                        return;
+                    }
+                    Log.i(TAG, String.format("CALIB_CHARACTERISTIC_UUID found: %s", calib_characteristic.getUuid().toString()));
                     // }
                 }
 
@@ -405,7 +444,7 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                 }
                 case 3:
                 {
-                    setCharacteristicNotification(blood_pressure_characteristic, true);
+                    setCharacteristicNotification(blood_pressure_sys_characteristic, true);
                     index = 4;
                     break;
                 }
@@ -413,6 +452,24 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                 {
                     setCharacteristicNotification(body_temperature_characteristic, true);
                     index = 5;
+                    break;
+                }
+                case 5:
+                {
+                    setCharacteristicNotification(blood_pressure_dia_characteristic, true);
+                    index = 6;
+                    break;
+                }
+                case 6:
+                {
+                    setCharacteristicNotification(progress_characteristic, true);
+                    index = 7;
+                    break;
+                }
+                case 7:
+                {
+                    setCharacteristicNotification(calib_characteristic, true);
+                    index = 8;
                     break;
                 }
                 default:
@@ -456,11 +513,37 @@ public class MainActivity<LeDeviceListAdapter> extends AppCompatActivity {
                     final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
                     data_2.setText("Heart Rate: " + data);
                 }
-                else if (characteristic.getUuid().equals(BLOOD_PRESSURE_CHARACTERISTIC_UUID))
+                else if (characteristic.getUuid().equals(BLOOD_PRESSURE_SYS_CHARACTERISTIC_UUID))
                 {
-                    Log.d(TAG, "Blood Pressure");
+                    Log.d(TAG, "Systolic BP");
                     final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-                    data_3.setText("Blood Pressure: " + data);
+                    data_5.setText("Systolic BP: " + data);
+                }
+                else if (characteristic.getUuid().equals(BLOOD_PRESSURE_DIA_CHARACTERISTIC_UUID))
+                {
+                    Log.d(TAG, "Diastolic BP");
+                    final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+                    data_6.setText("Diastolic BP: " + data);
+                }
+                else if (characteristic.getUuid().equals(PROGRESS_CHARACTERISTIC_UUID))
+                {
+                    Log.d(TAG, "Progress");
+                    final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+                    data_7.setText("Progress: " + data);
+                }
+                else if (characteristic.getUuid().equals(CALIB_CHARACTERISTIC_UUID))
+                {
+                    Log.d(TAG, "Device mode");
+                    final int data = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+                    
+                    if (data == 0)
+                    {
+                        data_8.setText("Device mode: Measuring");
+                    }
+                    else
+                    {
+                        data_8.setText("Device mode: Calibration");
+                    }
                 }
                 else if (characteristic.getUuid().equals(BODY_TEMPERATURE_CHARACTERISTIC_UUID))
                 {
